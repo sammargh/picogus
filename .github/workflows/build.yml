@@ -26,7 +26,7 @@ jobs:
       # If this were to reference changing branches (like "master"), this caching step must be removed!!!
       - name: Cache Pico-SDK and Extras 
         id: cache-sdk
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/pico/
           key: ${{ env.PICOSDK_VER }}-${{ env.PICOEXTRA_VER }}          
@@ -103,7 +103,7 @@ jobs:
 
       # will generate PicoGUS Firmwares.zip as downloadable artifact with all .uf2 files
       - name: Upload All Firmwares
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: PicoGUS Firmwares
           path: ${{env.OUTPUT_DIR}}
@@ -122,7 +122,8 @@ jobs:
       - name: Install OpenWatcom 2.0
         uses: open-watcom/setup-watcom@v0
         with:
-          version: "2.0"
+          version: "2.0-64"
+          tag: "2025-07-01-Build"
 
       - name: Build pgusinit
         working-directory: ${{github.workspace}}/pgusinit
@@ -133,7 +134,7 @@ jobs:
 
       # will generate pgusinit.zip as downloadable artifact with pgusinit.exe
       - name: Upload pgusinit
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pgusinit
           path: ${{env.OUTPUT_DIR}}/pgusinit.exe
@@ -158,12 +159,12 @@ jobs:
         run: |
           awk '/^# v${{ steps.tag.outputs.version }}/{a=1;next}/^# /{a=0}a' sw/CHANGELOG.md > release-body.md
       - name: Download firmware artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: PicoGUS Firmwares
           path: ${{env.STAGING_DIR}}
       - name: Download pgusinit artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: pgusinit
           path: ${{env.STAGING_DIR}}
